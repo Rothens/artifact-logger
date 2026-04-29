@@ -13,6 +13,7 @@ export default function CodePage() {
   const [codeDefinition, setCodeDefinition] = useState(null);
   const [items, setItems] = useState([]);
   const [message, setMessage] = useState('');
+  const [saving, setSaving] = useState(false);
   const { t } = useI18n();
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export default function CodePage() {
 
   async function handleSave(e) {
     e.preventDefault();
+    setSaving(true);
     try {
       const saved = await saveCodeDefinition(codeDefinition);
       setCodeDefinition(saved);
@@ -50,6 +52,8 @@ export default function CodePage() {
       setTimeout(() => setMessage(''), 1200);
     } catch {
       setMessage(t('dbError'));
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -117,7 +121,8 @@ export default function CodePage() {
           />
         </div>
 
-        <button type="submit" className="btn btn-success">
+        <button type="submit" className="btn btn-success" disabled={saving}>
+          {saving ? <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> : null}
           {t('saveCodeInfo')}
         </button>
 

@@ -18,6 +18,7 @@ export default function ItemPage() {
     const [item, setItem] = useState(null);
     const [codeDefinition, setCodeDefinition] = useState(null);
     const [message, setMessage] = useState('');
+    const [saving, setSaving] = useState(false);
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const { t } = useI18n();
     const fileInputRef = useRef(null);
@@ -59,6 +60,7 @@ export default function ItemPage() {
     }
 
     async function captureAllNowAndSave() {
+        setSaving(true);
         const updatedItem = {
             ...item,
             collectedAt: new Date().toISOString(),
@@ -73,6 +75,8 @@ export default function ItemPage() {
                 setTimeout(() => setMessage(''), 1800);
             } catch {
                 setMessage(t('dbError'));
+            } finally {
+                setSaving(false);
             }
             return;
         }
@@ -95,6 +99,8 @@ export default function ItemPage() {
                     setTimeout(() => setMessage(''), 1800);
                 } catch {
                     setMessage(t('dbError'));
+                } finally {
+                    setSaving(false);
                 }
             },
             async (error) => {
@@ -104,6 +110,8 @@ export default function ItemPage() {
                     setTimeout(() => setMessage(''), 2200);
                 } catch {
                     setMessage(t('dbError'));
+                } finally {
+                    setSaving(false);
                 }
             },
             { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
@@ -207,12 +215,15 @@ export default function ItemPage() {
 
     async function handleSave(e) {
         e.preventDefault();
+        setSaving(true);
         try {
             await saveItemRecord(item);
             setMessage(t('saved'));
             setTimeout(() => setMessage(''), 1200);
         } catch {
             setMessage(t('dbError'));
+        } finally {
+            setSaving(false);
         }
     }
 
@@ -271,7 +282,9 @@ export default function ItemPage() {
                         type="button"
                         className="btn btn-warning"
                         onClick={captureAllNowAndSave}
+                        disabled={saving}
                     >
+                        {saving ? <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> : null}
                         {t('captureAllNowAndSave')}
                     </button>
                 </div>
@@ -439,7 +452,8 @@ export default function ItemPage() {
                     </label>
                 </div>
 
-                <button type="submit" className="btn btn-success">
+                <button type="submit" className="btn btn-success" disabled={saving}>
+                    {saving ? <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> : null}
                     {t('saveItem')}
                 </button>
 
