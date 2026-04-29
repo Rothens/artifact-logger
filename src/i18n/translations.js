@@ -141,7 +141,7 @@ export const translations = {
         helpDataStep3: 'The JSON export can be imported into Artifact Museum to display items publicly.',
     },
     hu: {
-        appTitle: 'Tárgy Naplózó',
+        appTitle: 'Artifact Logger',
         home: 'Kezdőlap',
         scanEnterCode: 'Kód beolvasása / megadása',
         settings: 'Beállítások',
