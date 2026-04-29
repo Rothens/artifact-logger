@@ -1,6 +1,8 @@
 # Artifact Logger
 
-A fully offline Progressive Web App (PWA) for logging physical artifacts — souvenirs, snacks, tickets, gifts, and anything else worth remembering. Scan or enter a barcode/QR code, fill in details (photo, price, location, notes), and export everything as JSON for use with [Artifact Museum](../artifact-museum).
+A fully offline Progressive Web App (PWA) for logging physical artifacts — souvenirs, snacks, tickets, gifts, and anything else worth remembering. Scan or enter a barcode/QR code, fill in details (photo, price, location, notes), and export everything as JSON for use with [Artifact Museum](https://github.com/Rothens/artifact-museum).
+
+> **Try it live → [rothens.github.io/artifact-logger](https://rothens.github.io/artifact-logger/)**
 
 ## Key characteristics
 
@@ -44,19 +46,15 @@ Artifact Logger is a static site — the `dist/` output of `npm run build` can b
 
 Yes, Artifact Logger can be deployed to GitHub Pages. It has no server-side code; everything runs in the browser.
 
-1. Set `base` in `vite.config.js` to your repository path:
-   ```js
-   export default defineConfig({
-     base: '/artifact-logger/',   // replace with your repo name
-     // ...
-   })
-   ```
-2. Build: `npm run build`
-3. Deploy the `dist/` directory to the `gh-pages` branch (e.g. with the [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages) GitHub Action)
+The included GitHub Actions workflow (`.github/workflows/deploy.yml`) handles everything automatically. Just enable GitHub Pages in your repo settings:
+
+1. Go to your repo → **Settings** → **Pages**
+2. Under **Source**, select **GitHub Actions**
+3. Push to `main` — the workflow builds and deploys automatically
+
+The `VITE_BASE_PATH` env var is set to `/artifact-logger/` in the workflow so assets resolve correctly under the sub-path. When building for a server at a root domain, omit the variable and it defaults to `/`.
 
 The PWA service worker requires HTTPS, which GitHub Pages provides by default.
-
-> **Note:** If the app is served from a sub-path (e.g. `https://user.github.io/artifact-logger/`), the PWA `start_url` in `vite.config.js` must also be updated to match (e.g. `start_url: '/artifact-logger/'`).
 
 > Docker support is planned for a future release.
 
