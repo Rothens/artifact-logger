@@ -9,6 +9,7 @@ import {
 import { compressImageFile } from '../utils/imageCompression';
 import { formatBytes } from '../utils/storageInfo';
 import { useI18n } from '../i18n/I18nProvider';
+import ConfirmModal from '../components/ConfirmModal';
 
 export default function ItemPage() {
     const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function ItemPage() {
     const [item, setItem] = useState(null);
     const [codeDefinition, setCodeDefinition] = useState(null);
     const [message, setMessage] = useState('');
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const { t } = useI18n();
     const fileInputRef = useRef(null);
     const cameraInputRef = useRef(null);
@@ -48,8 +50,6 @@ export default function ItemPage() {
     }
 
     async function handleDeleteItem() {
-        const confirmed = window.confirm(t('confirmDeleteItem'));
-        if (!confirmed) return;
         try {
             await deleteItemRecord(item.id);
             navigate('/');
@@ -443,10 +443,17 @@ export default function ItemPage() {
                     {t('saveItem')}
                 </button>
 
-                <button type="button" className="btn btn-outline-danger" onClick={handleDeleteItem}>{t('deleteItem')}</button>
+                <button type="button" className="btn btn-outline-danger" onClick={() => setConfirmDeleteOpen(true)}>{t('deleteItem')}</button>
 
                 {message && <div className="alert alert-info py-2">{message}</div>}
             </form>
+
+            <ConfirmModal
+                open={confirmDeleteOpen}
+                message={t('confirmDeleteItem')}
+                onConfirm={handleDeleteItem}
+                onCancel={() => setConfirmDeleteOpen(false)}
+            />
         </div>
     );
 }

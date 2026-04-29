@@ -7,10 +7,12 @@ import {
 import { useI18n } from '../i18n/I18nProvider';
 import { useTheme } from '../theme/ThemeProvider';
 import { deleteAllData } from '../db/db';
+import ConfirmModal from '../components/ConfirmModal';
 
 export default function SettingsPage() {
   const [storageInfo, setStorageInfo] = useState(null);
   const [message, setMessage] = useState('');
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const { language, setLanguage, t } = useI18n();
   const { theme, setTheme } = useTheme();
 
@@ -39,11 +41,9 @@ export default function SettingsPage() {
   }
 
   async function handleDeleteAllData() {
-    const confirmed = window.confirm(t('confirmDeleteAllData'));
-    if (!confirmed) return;
-
     await deleteAllData();
     setMessage(t('allDataDeleted'));
+    setConfirmDeleteOpen(false);
   }
 
   return (
@@ -137,12 +137,19 @@ export default function SettingsPage() {
           </p>
           <button
             className="btn btn-danger"
-            onClick={handleDeleteAllData}
+            onClick={() => setConfirmDeleteOpen(true)}
           >
             {t('deleteAllData')}
           </button>
         </div>
       </div>
+
+      <ConfirmModal
+        open={confirmDeleteOpen}
+        message={t('confirmDeleteAllData')}
+        onConfirm={handleDeleteAllData}
+        onCancel={() => setConfirmDeleteOpen(false)}
+      />
     </div>
   );
 }
