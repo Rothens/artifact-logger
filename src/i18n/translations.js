@@ -105,7 +105,40 @@ export const translations = {
         deleteAllData: 'Delete all data',
         deleteAllDataDescription: 'This will permanently delete all code definitions and item records stored in this app.',
         confirmDeleteAllData: 'Delete ALL data? This cannot be undone.',
-        allDataDeleted: 'All data deleted.'
+        allDataDeleted: 'All data deleted.',
+
+        // Help modal
+        help: 'Help',
+        helpTitle: 'How to use Artifact Logger',
+        helpClose: 'Close',
+
+        helpSectionHome: 'Home',
+        helpHomeStep1: 'Tap "Scan / Enter Code" to log a new artifact.',
+        helpHomeStep2: 'Use "Export JSON" to save a backup of all your data and transfer it to Artifact Museum.',
+        helpHomeStep3: 'Recent items appear below. Tap "Open item" to edit one.',
+
+        helpSectionScan: 'Scanning a code',
+        helpScanStep1: 'Choose "Camera" to scan a QR code or barcode with your camera, or "Manual" to type a value.',
+        helpScanStep2: 'Toggle "Quick capture mode" to automatically stamp the current time and GPS the moment a code is detected.',
+        helpScanStep3: 'If the code is new, you will be asked to set it up. If it is already known, the item opens directly.',
+
+        helpSectionItem: 'Logging an item',
+        helpItemStep1: 'Give the item a label and optional notes.',
+        helpItemStep2: 'Tap "Capture all now and save" to stamp the timestamp and GPS location in one go.',
+        helpItemStep3: 'Add a photo with "Choose file" or "Take photo". Images are compressed automatically.',
+        helpItemStep4: 'Fill in metadata: price, shop, recipient, consumed/gifted status.',
+        helpItemStep5: 'Tap "Save Item" when done. Your data is stored locally on this device.',
+
+        helpSectionSettings: 'Settings',
+        helpSettingsStep1: 'Switch the interface language between English and Hungarian.',
+        helpSettingsStep2: 'Choose a light, dark, or system theme.',
+        helpSettingsStep3: 'Tap "Request persistent storage" so the browser does not delete your data under storage pressure.',
+        helpSettingsStep4: 'Use "Delete all data" with caution — this cannot be undone.',
+
+        helpSectionData: 'Your data',
+        helpDataStep1: 'All data is stored in your browser\'s local storage (IndexedDB). Nothing is sent to any server.',
+        helpDataStep2: 'Export your data regularly via the "Export JSON" button on the home screen.',
+        helpDataStep3: 'The JSON export can be imported into Artifact Museum to display items publicly.',
     },
     hu: {
         appTitle: 'Tárgy Naplózó',
@@ -213,6 +246,39 @@ export const translations = {
         deleteAllData: 'Minden adat törlése',
         deleteAllDataDescription: 'Ez végleg törli az alkalmazásban tárolt összes kóddefiníciót és elemrekordot.',
         confirmDeleteAllData: 'Törlöd az ÖSSZES adatot? Ez nem vonható vissza.',
-        allDataDeleted: 'Minden adat törölve.'
+        allDataDeleted: 'Minden adat törölve.',
+
+        // Help modal
+        help: 'Súgó',
+        helpTitle: 'Hogyan használd az Artifact Loggert',
+        helpClose: 'Bezárás',
+
+        helpSectionHome: 'Kezdőlap',
+        helpHomeStep1: 'Koppints a „Kód beolvasása / megadása" gombra egy új tárgy naplózásához.',
+        helpHomeStep2: 'A „JSON export" gombbal menthetsz biztonsági másolatot, és átviheted az adatokat az Artifact Museumba.',
+        helpHomeStep3: 'A legutóbbi elemek alul jelennek meg. Az „Elem megnyitása" gombbal szerkesztheted őket.',
+
+        helpSectionScan: 'Kód beolvasása',
+        helpScanStep1: 'Válaszd a „Kamera" lehetőséget QR-kód vagy vonalkód beolvasásához, vagy a „Kézi" módot érték beírásához.',
+        helpScanStep2: 'A „Gyors rögzítés" kapcsolóval a kód észlelésekor automatikusan rögzíti az időt és a GPS-helyet.',
+        helpScanStep3: 'Ha a kód új, beállíthatod. Ha már ismert, az elem közvetlenül megnyílik.',
+
+        helpSectionItem: 'Tárgy naplózása',
+        helpItemStep1: 'Adj nevet a tárgynak és opcionálisan írj megjegyzést.',
+        helpItemStep2: 'A „Mindent most rögzít és ment" gombbal egyszerre rögzítheted az időt és a GPS-helyet.',
+        helpItemStep3: 'Adj hozzá fotót a „Fájl kiválasztása" vagy „Fotó készítése" gombbal. A képek automatikusan tömörítve lesznek.',
+        helpItemStep4: 'Töltsd ki a metaadatokat: ár, bolt, megkapó, elfogyasztva/ajándékba adva.',
+        helpItemStep5: 'Koppints az „Elem mentése" gombra. Az adatok ezen az eszközön tárolódnak.',
+
+        helpSectionSettings: 'Beállítások',
+        helpSettingsStep1: 'Válts az angol és a magyar felület között.',
+        helpSettingsStep2: 'Válassz világos, sötét vagy rendszerszintű témát.',
+        helpSettingsStep3: 'A „Tartós tárhely kérése" gombbal megakadályozhatod, hogy a böngésző törölje az adataidat.',
+        helpSettingsStep4: 'A „Minden adat törlése" gomb visszavonhatatlan műveletet hajt végre — óvatosan használd.',
+
+        helpSectionData: 'Az adataidról',
+        helpDataStep1: 'Minden adat a böngésző helyi tárhelyén (IndexedDB) van tárolva. Semmi nem kerül szerverre.',
+        helpDataStep2: 'Rendszeresen exportáld az adataidat a kezdőlap „JSON export" gombjával.',
+        helpDataStep3: 'A JSON exportot az Artifact Museumba importálva nyilvánosan megjeleníthetők a tárgyak.',
     },
 };

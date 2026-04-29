@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ScanPage from './pages/ScanPage';
@@ -5,15 +6,26 @@ import NewCodePage from './pages/NewCodePage';
 import ItemPage from './pages/ItemPage';
 import CodePage from './pages/CodePage';
 import SettingsPage from './pages/SettingsPage';
+import HelpModal from './components/HelpModal';
 import { useI18n } from './i18n/I18nProvider';
 
 export default function App() {
   const { t } = useI18n();
-  
+  const [helpOpen, setHelpOpen] = useState(false);
+
   return (
     <div className="container py-4">
       <header className="mb-4">
-        <h1 className="h3 mb-2">{t('appTitle')}</h1>
+        <div className="d-flex align-items-center justify-content-between mb-2">
+          <h1 className="h3 mb-0">{t('appTitle')}</h1>
+          <button
+            className="btn btn-sm btn-outline-secondary"
+            onClick={() => setHelpOpen(true)}
+            aria-label={t('help')}
+          >
+            ?
+          </button>
+        </div>
         <nav className="d-flex gap-3">
           <Link to="/">{t('home')}</Link>
           <Link to="/scan">{t('scanEnterCode')}</Link>
@@ -29,6 +41,8 @@ export default function App() {
         <Route path="/code/:id" element={<CodePage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
+
+      <HelpModal show={helpOpen} onClose={() => setHelpOpen(false)} />
     </div>
   );
 }
