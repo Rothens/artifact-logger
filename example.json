@@ -1,0 +1,193 @@
+{
+  "appVersion": 1,
+  "exportedAt": "2026-04-28T10:15:00.000Z",
+  "codeDefinitions": [
+    {
+      "id": "def_001",
+      "codeType": "qr_code",
+      "codeValue": "MUSEUM-ITEM-JADE-STATUE",
+      "codeKey": "qr_code:MUSEUM-ITEM-JADE-STATUE",
+      "mode": "unique_object",
+      "name": "Jade Statue",
+      "category": "souvenir",
+      "notes": "Bought at the Nishiki Market basement stall",
+      "createdAt": "2026-03-12T09:00:00.000Z",
+      "updatedAt": "2026-03-12T09:00:00.000Z"
+    },
+    {
+      "id": "def_002",
+      "codeType": "ean_13",
+      "codeValue": "4901777317390",
+      "codeKey": "ean_13:4901777317390",
+      "mode": "repeatable_product",
+      "name": "Matcha KitKat",
+      "category": "snack",
+      "notes": "Standard supermarket matcha flavour",
+      "createdAt": "2026-03-13T11:30:00.000Z",
+      "updatedAt": "2026-03-13T11:30:00.000Z"
+    },
+    {
+      "id": "def_003",
+      "codeType": "qr_code",
+      "codeValue": "TICKET-FUSHIMI-INARI-2026",
+      "codeKey": "qr_code:TICKET-FUSHIMI-INARI-2026",
+      "mode": "unique_object",
+      "name": "Fushimi Inari Entry Ticket",
+      "category": "ticket",
+      "notes": "",
+      "createdAt": "2026-03-14T08:00:00.000Z",
+      "updatedAt": "2026-03-14T08:00:00.000Z"
+    },
+    {
+      "id": "def_004",
+      "codeType": "ean_13",
+      "codeValue": "4902102141697",
+      "codeKey": "ean_13:4902102141697",
+      "mode": "repeatable_product",
+      "name": "Ramune Soda",
+      "category": "drink",
+      "notes": "Original lychee flavour",
+      "createdAt": "2026-03-14T14:00:00.000Z",
+      "updatedAt": "2026-03-14T14:00:00.000Z"
+    },
+    {
+      "id": "def_005",
+      "codeType": "qr_code",
+      "codeValue": "GIFT-TENUGUI-CLOTH-BLUE",
+      "codeKey": "qr_code:GIFT-TENUGUI-CLOTH-BLUE",
+      "mode": "unique_object",
+      "name": "Blue Tenugui Cloth",
+      "category": "gift",
+      "notes": "Traditional hand towel with indigo wave pattern",
+      "createdAt": "2026-03-15T16:45:00.000Z",
+      "updatedAt": "2026-03-15T16:45:00.000Z"
+    }
+  ],
+  "itemRecords": [
+    {
+      "id": "item_001",
+      "codeDefinitionId": "def_001",
+      "label": "Small jade statue — laughing monk",
+      "notes": "Deep green colour, about 8cm tall. Seller said it was carved locally.",
+      "collectedAt": "2026-03-12T09:05:00.000Z",
+      "updatedAt": "2026-03-12T09:10:00.000Z",
+      "location": {
+        "lat": 35.0056,
+        "lng": 135.7660,
+        "accuracy": 12
+      },
+      "photo": {
+        "dataUrl": null,
+        "width": null,
+        "height": null,
+        "compressedSize": null
+      },
+      "metadata": {
+        "price": "2800",
+        "currency": "JPY",
+        "sourceShop": "Nishiki Market, Kyoto",
+        "recipient": "",
+        "consumed": false,
+        "gifted": false
+      }
+    },
+    {
+      "id": "item_002",
+      "codeDefinitionId": "def_002",
+      "label": "",
+      "notes": "First one from Lawson on Kawaramachi",
+      "collectedAt": "2026-03-13T11:35:00.000Z",
+      "updatedAt": "2026-03-13T11:40:00.000Z",
+      "location": null,
+      "photo": null,
+      "metadata": {
+        "price": "150",
+        "currency": "JPY",
+        "sourceShop": "Lawson",
+        "recipient": "",
+        "consumed": true,
+        "gifted": false
+      }
+    },
+    {
+      "id": "item_003",
+      "codeDefinitionId": "def_002",
+      "label": "",
+      "notes": "Bought extra to bring home",
+      "collectedAt": "2026-03-15T10:00:00.000Z",
+      "updatedAt": "2026-03-15T10:05:00.000Z",
+      "location": null,
+      "photo": null,
+      "metadata": {
+        "price": "150",
+        "currency": "JPY",
+        "sourceShop": "FamilyMart",
+        "recipient": "Mom",
+        "consumed": false,
+        "gifted": true
+      }
+    },
+    {
+      "id": "item_004",
+      "codeDefinitionId": "def_003",
+      "label": "",
+      "notes": "Free entry, just scanned the QR at the gate",
+      "collectedAt": "2026-03-14T08:15:00.000Z",
+      "updatedAt": "2026-03-14T08:15:00.000Z",
+      "location": {
+        "lat": 34.9671,
+        "lng": 135.7727,
+        "accuracy": 8
+      },
+      "photo": null,
+      "metadata": {
+        "price": "0",
+        "currency": "JPY",
+        "sourceShop": "Fushimi Inari Taisha",
+        "recipient": "",
+        "consumed": false,
+        "gifted": false
+      }
+    },
+    {
+      "id": "item_005",
+      "codeDefinitionId": "def_004",
+      "label": "",
+      "notes": "",
+      "collectedAt": "2026-03-14T14:05:00.000Z",
+      "updatedAt": "2026-03-14T14:05:00.000Z",
+      "location": null,
+      "photo": null,
+      "metadata": {
+        "price": "220",
+        "currency": "JPY",
+        "sourceShop": "Arashiyama souvenir street",
+        "recipient": "",
+        "consumed": true,
+        "gifted": false
+      }
+    },
+    {
+      "id": "item_006",
+      "codeDefinitionId": "def_005",
+      "label": "Blue tenugui — wave pattern",
+      "notes": "Bought for Anna. Wrapped in tissue paper with a ribbon.",
+      "collectedAt": "2026-03-15T16:50:00.000Z",
+      "updatedAt": "2026-03-15T17:00:00.000Z",
+      "location": {
+        "lat": 35.0116,
+        "lng": 135.7681,
+        "accuracy": 15
+      },
+      "photo": null,
+      "metadata": {
+        "price": "1200",
+        "currency": "JPY",
+        "sourceShop": "Kyoto Handicraft Center",
+        "recipient": "Anna",
+        "consumed": false,
+        "gifted": true
+      }
+    }
+  ]
+}
