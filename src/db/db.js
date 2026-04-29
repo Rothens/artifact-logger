@@ -258,15 +258,19 @@ export async function deleteAllData() {
 export async function deleteCodeDefinitionAndItems(codeDefinitionId) {
   const db = await getDb();
 
+  // Single transaction — if any delete fails the whole operation rolls back,
+  // preventing orphaned item records from referencing a deleted code definition.
   const tx = db.transaction([CODE_STORE, ITEM_STORE], 'readwrite');
-  const itemStore = tx.objectStore(ITEM_STORE);
-  const index = itemStore.index('codeDefinitionId');
-  const items = await index.getAll(codeDefinitionId);
+  try {
+    const itemStore = tx.objectStore(ITEM_STORE);
+    const index = itemStore.index('codeDefinitionId');
+    const items = await index.getAll(codeDefinitionId);
 
-  for (const item of items) {
-    await itemStore.delete(item.id);
+    await Promise.all(items.map((item) => itemStore.delete(item.id)));
+    await tx.objectStore(CODE_STORE).delete(codeDefinitionId);
+    await tx.done;
+  } catch (err) {
+    tx.abort();
+    throw err;
   }
-
-  await tx.objectStore(CODE_STORE).delete(codeDefinitionId);
-  await tx.done;
 }
