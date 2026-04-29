@@ -10,6 +10,12 @@ import { compressImageFile } from '../utils/imageCompression';
 import { formatBytes } from '../utils/storageInfo';
 import { useI18n } from '../i18n/I18nProvider';
 import ConfirmModal from '../components/ConfirmModal';
+import {
+    GEO_OPTIONS,
+    PHOTO_MAX_WIDTH, PHOTO_MAX_HEIGHT, PHOTO_QUALITY, PHOTO_OUTPUT_TYPE,
+    VIBRATE_MS,
+    MSG_SHORT, MSG_MEDIUM, MSG_LONG,
+} from '../constants';
 
 export default function ItemPage() {
     const navigate = useNavigate();
@@ -72,7 +78,7 @@ export default function ItemPage() {
             try {
                 await saveItemRecord(updatedItem);
                 setMessage(t('timeCapturedAndSavedNoGeo'));
-                setTimeout(() => setMessage(''), 1800);
+                setTimeout(() => setMessage(''), MSG_MEDIUM);
             } catch {
                 setMessage(t('dbError'));
             } finally {
@@ -94,9 +100,9 @@ export default function ItemPage() {
                 setItem(finalItem);
                 try {
                     await saveItemRecord(finalItem);
-                    navigator.vibrate?.(50);
+                    navigator.vibrate?.(VIBRATE_MS);
                     setMessage(t('timeLocationSaveComplete'));
-                    setTimeout(() => setMessage(''), 1800);
+                    setTimeout(() => setMessage(''), MSG_MEDIUM);
                 } catch {
                     setMessage(t('dbError'));
                 } finally {
@@ -107,14 +113,14 @@ export default function ItemPage() {
                 try {
                     await saveItemRecord(updatedItem);
                     setMessage(t('savedWithTimeOnlyLocationFailed').replace('{{error}}', error.message));
-                    setTimeout(() => setMessage(''), 2200);
+                    setTimeout(() => setMessage(''), MSG_LONG);
                 } catch {
                     setMessage(t('dbError'));
                 } finally {
                     setSaving(false);
                 }
             },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            GEO_OPTIONS
         );
     }
 
@@ -141,7 +147,7 @@ export default function ItemPage() {
             collectedAt: new Date().toISOString(),
         }));
         setMessage(t('timeCaptured'));
-        setTimeout(() => setMessage(''), 1200);
+        setTimeout(() => setMessage(''), MSG_SHORT);
     }
 
     function captureCurrentLocation() {
@@ -161,16 +167,12 @@ export default function ItemPage() {
                     },
                 }));
                 setMessage(t('locationCaptured'));
-                setTimeout(() => setMessage(''), 1200);
+                setTimeout(() => setMessage(''), MSG_SHORT);
             },
             (error) => {
                 setMessage(t('locationFailed').replace('{{error}}', error.message));
             },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0,
-            }
+            GEO_OPTIONS
         );
     }
 
@@ -187,10 +189,10 @@ export default function ItemPage() {
             setMessage(t('compressingPhoto'));
 
             const compressedPhoto = await compressImageFile(file, {
-                maxWidth: 1280,
-                maxHeight: 1280,
-                quality: 0.78,
-                outputType: 'image/jpeg',
+                maxWidth: PHOTO_MAX_WIDTH,
+                maxHeight: PHOTO_MAX_HEIGHT,
+                quality: PHOTO_QUALITY,
+                outputType: PHOTO_OUTPUT_TYPE,
             });
 
             setItem((prev) => ({
@@ -203,13 +205,13 @@ export default function ItemPage() {
                     .replace('{{from}}', formatBytes(compressedPhoto.originalSize))
                     .replace('{{to}}', formatBytes(compressedPhoto.compressedSize))
             );
-            setTimeout(() => setMessage(''), 2500);
+            setTimeout(() => setMessage(''), MSG_LONG);
         } catch (error) {
             console.error(error);
             setMessage(
                 t('photoCompressionFailed').replace('{{error}}', error.message)
             );
-            setTimeout(() => setMessage(''), 2500);
+            setTimeout(() => setMessage(''), MSG_LONG);
         }
     }
 
@@ -219,7 +221,7 @@ export default function ItemPage() {
         try {
             await saveItemRecord(item);
             setMessage(t('saved'));
-            setTimeout(() => setMessage(''), 1200);
+            setTimeout(() => setMessage(''), MSG_SHORT);
         } catch {
             setMessage(t('dbError'));
         } finally {

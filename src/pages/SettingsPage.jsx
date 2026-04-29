@@ -8,6 +8,7 @@ import { useI18n } from '../i18n/I18nProvider';
 import { useTheme } from '../theme/ThemeProvider';
 import { deleteAllData } from '../db/db';
 import ConfirmModal from '../components/ConfirmModal';
+import { MSG_MEDIUM } from '../constants';
 
 export default function SettingsPage() {
   const [storageInfo, setStorageInfo] = useState(null);
@@ -37,7 +38,7 @@ export default function SettingsPage() {
     }
 
     await loadStorageInfo();
-    setTimeout(() => setMessage(''), 2000);
+    setTimeout(() => setMessage(''), MSG_MEDIUM);
   }
 
   async function handleDeleteAllData() {

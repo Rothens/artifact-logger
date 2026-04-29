@@ -8,6 +8,7 @@ import {
 } from '../db/db';
 import { quickCaptureLocation } from '../utils/quickCapture';
 import CameraScanner from '../components/CameraScanner';
+import { VIBRATE_MS, MSG_MEDIUM } from '../constants';
 
 export default function ScanPage() {
     const navigate = useNavigate();
@@ -42,7 +43,7 @@ export default function ScanPage() {
             }
 
             if (result.kind === 'open_unique_item') {
-                navigator.vibrate?.(50);
+                navigator.vibrate?.(VIBRATE_MS);
                 navigate(`/item/${result.item.id}`);
                 return;
             }
@@ -101,7 +102,7 @@ export default function ScanPage() {
             codeDefinitionId,
         });
 
-        navigator.vibrate?.(50);
+        navigator.vibrate?.(VIBRATE_MS);
 
         setStatusMessage('Item created. Capturing location...');
 
@@ -113,7 +114,7 @@ export default function ScanPage() {
             setStatusMessage(`Item saved with time only. Location failed: ${locationResult.reason}`);
         }
 
-        setTimeout(() => setStatusMessage(''), 2000);
+        setTimeout(() => setStatusMessage(''), MSG_MEDIUM);
 
         return item;
     }

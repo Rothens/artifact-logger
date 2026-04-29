@@ -1,4 +1,5 @@
 import { updateItemRecordPartial } from '../db/db';
+import { GEO_OPTIONS } from '../constants';
 
 export async function quickCaptureLocation(itemId) {
   if (!navigator.geolocation) {
@@ -30,11 +31,7 @@ export async function quickCaptureLocation(itemId) {
           reason: error.message,
         });
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
-      }
+      GEO_OPTIONS
     );
   });
 }

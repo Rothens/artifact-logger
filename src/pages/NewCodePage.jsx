@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { createCodeDefinition, createItemRecord, createItemRecordWithTimestamp } from '../db/db';
 import { quickCaptureLocation } from '../utils/quickCapture';
 import { useI18n } from '../i18n/I18nProvider';
+import { VIBRATE_MS } from '../constants';
 
 function useQuery() {
     const { search } = useLocation();
@@ -36,7 +37,7 @@ export default function NewCodePage() {
                 ? await createItemRecordWithTimestamp({ codeDefinitionId: codeDefinition.id, label: name, notes: '' })
                 : await createItemRecord({ codeDefinitionId: codeDefinition.id, label: name, notes: '' });
 
-            navigator.vibrate?.(50);
+            navigator.vibrate?.(VIBRATE_MS);
 
             if (quickCapture) {
                 await quickCaptureLocation(item.id);

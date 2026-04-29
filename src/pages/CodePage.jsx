@@ -6,6 +6,7 @@ import {
   getItemRecordsByCodeDefinitionId,
 } from '../db/db';
 import { useI18n } from '../i18n/I18nProvider';
+import { MSG_SHORT } from '../constants';
 
 export default function CodePage() {
   const { id } = useParams();
@@ -49,7 +50,7 @@ export default function CodePage() {
       const saved = await saveCodeDefinition(codeDefinition);
       setCodeDefinition(saved);
       setMessage(t('saved'));
-      setTimeout(() => setMessage(''), 1200);
+      setTimeout(() => setMessage(''), MSG_SHORT);
     } catch {
       setMessage(t('dbError'));
     } finally {
