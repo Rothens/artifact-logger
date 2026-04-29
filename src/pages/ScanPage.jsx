@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useI18n } from '../i18n/I18nProvider';
 import {
     resolveExistingCodeScan,
     createItemRecord,
@@ -10,6 +11,7 @@ import CameraScanner from '../components/CameraScanner';
 
 export default function ScanPage() {
     const navigate = useNavigate();
+    const { t } = useI18n();
 
     const [codeType, setCodeType] = useState('qr_code');
     const [codeValue, setCodeValue] = useState('');
@@ -20,8 +22,6 @@ export default function ScanPage() {
     const [statusMessage, setStatusMessage] = useState('');
 
     async function handleResolvedScan(resolvedCodeType, resolvedCodeValue) {
-        console.log('handleResolvedScan:', resolvedCodeType, resolvedCodeValue);
-
         setError('');
         setRepeatableAction(null);
 
@@ -31,43 +31,32 @@ export default function ScanPage() {
             return;
         }
 
-        const result = await resolveExistingCodeScan(resolvedCodeType, trimmed);
-        console.log('resolveExistingCodeScan result:', result);
+        try {
+            const result = await resolveExistingCodeScan(resolvedCodeType, trimmed);
 
-        if (result.kind === 'new_code') {
-            navigate(
-                `/new-code?codeType=${encodeURIComponent(resolvedCodeType)}&codeValue=${encodeURIComponent(trimmed)}&quickCapture=${quickCapture}`
-            );
-            return;
-        }
+            if (result.kind === 'new_code') {
+                navigate(
+                    `/new-code?codeType=${encodeURIComponent(resolvedCodeType)}&codeValue=${encodeURIComponent(trimmed)}&quickCapture=${quickCapture}`
+                );
+                return;
+            }
 
-        if (result.kind === 'open_unique_item') {
-            if (quickCapture) {
+            if (result.kind === 'open_unique_item') {
                 navigator.vibrate?.(50);
-
-                const patched = {
-                    ...result.item,
-                    collectedAt: new Date().toISOString(),
-                };
-
-                // reuse partial updater through direct save route later if you want
-                // for now just navigate and let user save manually, or we can make this stricter
                 navigate(`/item/${result.item.id}`);
                 return;
             }
 
-            navigate(`/item/${result.item.id}`);
-            return;
-        }
-
-        if (result.kind === 'repeatable_product') {
-            if (quickCapture) {
-                const item = await createAndQuickCapture(result.codeDefinition.id);
-                navigate(`/item/${item.id}`);
-                return;
+            if (result.kind === 'repeatable_product') {
+                if (quickCapture) {
+                    const item = await createAndQuickCapture(result.codeDefinition.id);
+                    navigate(`/item/${item.id}`);
+                    return;
+                }
+                setRepeatableAction(result);
             }
-
-            setRepeatableAction(result);
+        } catch {
+            setError(t('dbError'));
         }
     }
 
@@ -87,14 +76,14 @@ export default function ScanPage() {
 
     async function handleAddNewInstance() {
         if (!repeatableAction) return;
-
-        const item = quickCapture
-            ? await createAndQuickCapture(repeatableAction.codeDefinition.id)
-            : await createItemRecord({
-                codeDefinitionId: repeatableAction.codeDefinition.id,
-            });
-
-        navigate(`/item/${item.id}`);
+        try {
+            const item = quickCapture
+                ? await createAndQuickCapture(repeatableAction.codeDefinition.id)
+                : await createItemRecord({ codeDefinitionId: repeatableAction.codeDefinition.id });
+            navigate(`/item/${item.id}`);
+        } catch {
+            setError(t('dbError'));
+        }
     }
 
     function handleOpenLatest() {

@@ -23,15 +23,17 @@ export default function ItemPage() {
 
     useEffect(() => {
         async function load() {
-            const loadedItem = await getItemRecordById(id);
-            setItem(loadedItem);
-
-            if (loadedItem) {
-                const loadedCodeDefinition = await getCodeDefinitionById(loadedItem.codeDefinitionId);
-                setCodeDefinition(loadedCodeDefinition);
+            try {
+                const loadedItem = await getItemRecordById(id);
+                setItem(loadedItem);
+                if (loadedItem) {
+                    const loadedCodeDefinition = await getCodeDefinitionById(loadedItem.codeDefinitionId);
+                    setCodeDefinition(loadedCodeDefinition);
+                }
+            } catch {
+                setMessage(t('loadError'));
             }
         }
-
         load();
     }, [id]);
 
@@ -47,10 +49,13 @@ export default function ItemPage() {
 
     async function handleDeleteItem() {
         const confirmed = window.confirm(t('confirmDeleteItem'));
-        if(!confirmed) return;
-
-        await deleteItemRecord(item.id);
-        navigate('/');
+        if (!confirmed) return;
+        try {
+            await deleteItemRecord(item.id);
+            navigate('/');
+        } catch {
+            setMessage(t('dbError'));
+        }
     }
 
     async function captureAllNowAndSave() {
@@ -62,9 +67,13 @@ export default function ItemPage() {
         setItem(updatedItem);
 
         if (!navigator.geolocation) {
-            await saveItemRecord(updatedItem);
-            setMessage(t('timeCapturedAndSavedNoGeo'));
-            setTimeout(() => setMessage(''), 1800);
+            try {
+                await saveItemRecord(updatedItem);
+                setMessage(t('timeCapturedAndSavedNoGeo'));
+                setTimeout(() => setMessage(''), 1800);
+            } catch {
+                setMessage(t('dbError'));
+            }
             return;
         }
 
@@ -78,25 +87,26 @@ export default function ItemPage() {
                         accuracyMeters: position.coords.accuracy,
                     },
                 };
-
                 setItem(finalItem);
-                await saveItemRecord(finalItem);
-                navigator.vibrate?.(50);
-                setMessage(t('timeLocationSaveComplete'));
-                setTimeout(() => setMessage(''), 1800);
+                try {
+                    await saveItemRecord(finalItem);
+                    navigator.vibrate?.(50);
+                    setMessage(t('timeLocationSaveComplete'));
+                    setTimeout(() => setMessage(''), 1800);
+                } catch {
+                    setMessage(t('dbError'));
+                }
             },
             async (error) => {
-                await saveItemRecord(updatedItem);
-                setMessage(
-                    t('savedWithTimeOnlyLocationFailed').replace('{{error}}', error.message)
-                );
-                setTimeout(() => setMessage(''), 2200);
+                try {
+                    await saveItemRecord(updatedItem);
+                    setMessage(t('savedWithTimeOnlyLocationFailed').replace('{{error}}', error.message));
+                    setTimeout(() => setMessage(''), 2200);
+                } catch {
+                    setMessage(t('dbError'));
+                }
             },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0,
-            }
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
     }
 
@@ -197,9 +207,13 @@ export default function ItemPage() {
 
     async function handleSave(e) {
         e.preventDefault();
-        await saveItemRecord(item);
-        setMessage(t('saved'));
-        setTimeout(() => setMessage(''), 1200);
+        try {
+            await saveItemRecord(item);
+            setMessage(t('saved'));
+            setTimeout(() => setMessage(''), 1200);
+        } catch {
+            setMessage(t('dbError'));
+        }
     }
 
     return (

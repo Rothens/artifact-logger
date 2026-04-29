@@ -106,6 +106,8 @@ export const translations = {
         deleteAllDataDescription: 'This will permanently delete all code definitions and item records stored in this app.',
         confirmDeleteAllData: 'Delete ALL data? This cannot be undone.',
         allDataDeleted: 'All data deleted.',
+        dbError: 'Something went wrong. Your data may not have been saved.',
+        loadError: 'Failed to load data.',
 
         // Help modal
         help: 'Help',
@@ -247,6 +249,8 @@ export const translations = {
         deleteAllDataDescription: 'Ez végleg törli az alkalmazásban tárolt összes kóddefiníciót és elemrekordot.',
         confirmDeleteAllData: 'Törlöd az ÖSSZES adatot? Ez nem vonható vissza.',
         allDataDeleted: 'Minden adat törölve.',
+        dbError: 'Valami hiba történt. Lehet, hogy az adatok nem lettek elmentve.',
+        loadError: 'Az adatok betöltése sikertelen.',
 
         // Help modal
         help: 'Súgó',

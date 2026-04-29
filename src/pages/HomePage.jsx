@@ -6,28 +6,26 @@ import { useI18n } from '../i18n/I18nProvider';
 
 export default function HomePage() {
     const [items, setItems] = useState([]);
+    const [error, setError] = useState('');
     const location = useLocation();
     const { t } = useI18n();
 
     useEffect(() => {
         async function load() {
-            const allItems = await getAllItemRecords();
-            allItems.sort((a, b) => {
-                const aTime = a.updatedAt || '';
-                const bTime = b.updatedAt || '';
-                return bTime.localeCompare(aTime);
-            });
-
-            const enriched = await Promise.all(
-                allItems.map(async (item) => {
-                    const codeDefinition = await getCodeDefinitionById(item.codeDefinitionId);
-                    return { ...item, codeDefinition };
-                })
-            );
-
-            setItems(enriched);
+            try {
+                const allItems = await getAllItemRecords();
+                allItems.sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+                const enriched = await Promise.all(
+                    allItems.map(async (item) => {
+                        const codeDefinition = await getCodeDefinitionById(item.codeDefinitionId);
+                        return { ...item, codeDefinition };
+                    })
+                );
+                setItems(enriched);
+            } catch {
+                setError(t('loadError'));
+            }
         }
-
         load();
     }, [location.key]);
 
@@ -37,16 +35,25 @@ export default function HomePage() {
         return mode || 'unknown';
     }
 
+    async function handleExport() {
+        try {
+            await exportAllData();
+        } catch {
+            setError(t('dbError'));
+        }
+    }
+
     return (
         <div>
             <div className="d-flex gap-2 mb-3">
                 <Link to="/scan" className="btn btn-primary">
                     {t('scanEnterCode')}
                 </Link>
-                <button className="btn btn-outline-secondary" onClick={exportAllData}>
+                <button className="btn btn-outline-secondary" onClick={handleExport}>
                     {t('exportJson')}
                 </button>
             </div>
+            {error && <div className="alert alert-danger py-2 mb-3">{error}</div>}
 
             <h2 className="h5 mb-3">{t('recentItems')}</h2>
 

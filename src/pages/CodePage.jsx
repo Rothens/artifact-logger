@@ -17,19 +17,16 @@ export default function CodePage() {
 
   useEffect(() => {
     async function load() {
-      const code = await getCodeDefinitionById(id);
-      const relatedItems = await getItemRecordsByCodeDefinitionId(id);
-
-      relatedItems.sort((a, b) => {
-        const aTime = a.updatedAt || '';
-        const bTime = b.updatedAt || '';
-        return bTime.localeCompare(aTime);
-      });
-
-      setCodeDefinition(code);
-      setItems(relatedItems);
+      try {
+        const code = await getCodeDefinitionById(id);
+        const relatedItems = await getItemRecordsByCodeDefinitionId(id);
+        relatedItems.sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+        setCodeDefinition(code);
+        setItems(relatedItems);
+      } catch {
+        setMessage(t('loadError'));
+      }
     }
-
     load();
   }, [id]);
 
@@ -46,10 +43,14 @@ export default function CodePage() {
 
   async function handleSave(e) {
     e.preventDefault();
-    const saved = await saveCodeDefinition(codeDefinition);
-    setCodeDefinition(saved);
-    setMessage(t('saved'));
-    setTimeout(() => setMessage(''), 1200);
+    try {
+      const saved = await saveCodeDefinition(codeDefinition);
+      setCodeDefinition(saved);
+      setMessage(t('saved'));
+      setTimeout(() => setMessage(''), 1200);
+    } catch {
+      setMessage(t('dbError'));
+    }
   }
 
   return (

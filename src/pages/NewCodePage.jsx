@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createCodeDefinition, createItemRecord, createItemRecordWithTimestamp } from '../db/db';
 import { quickCaptureLocation } from '../utils/quickCapture';
+import { useI18n } from '../i18n/I18nProvider';
 
 function useQuery() {
     const { search } = useLocation();
@@ -20,38 +21,31 @@ export default function NewCodePage() {
     const [name, setName] = useState('');
     const [category, setCategory] = useState('other');
     const [notes, setNotes] = useState('');
+    const [error, setError] = useState('');
+    const { t } = useI18n();
 
     async function handleSubmit(e) {
         e.preventDefault();
-
-        const codeDefinition = await createCodeDefinition({
-            codeType,
-            codeValue,
-            mode,
-            name,
-            category,
-            notes,
-        });
-
-        const item = quickCapture
-            ? await createItemRecordWithTimestamp({
-                codeDefinitionId: codeDefinition.id,
-                label: name,
-                notes: '',
-            })
-            : await createItemRecord({
-                codeDefinitionId: codeDefinition.id,
-                label: name,
-                notes: '',
+        setError('');
+        try {
+            const codeDefinition = await createCodeDefinition({
+                codeType, codeValue, mode, name, category, notes,
             });
 
-        navigator.vibrate?.(50);
+            const item = quickCapture
+                ? await createItemRecordWithTimestamp({ codeDefinitionId: codeDefinition.id, label: name, notes: '' })
+                : await createItemRecord({ codeDefinitionId: codeDefinition.id, label: name, notes: '' });
 
-        if (quickCapture) {
-            await quickCaptureLocation(item.id);
+            navigator.vibrate?.(50);
+
+            if (quickCapture) {
+                await quickCaptureLocation(item.id);
+            }
+
+            navigate(`/item/${item.id}`);
+        } catch {
+            setError(t('dbError'));
         }
-
-        navigate(`/item/${item.id}`);
     }
 
     return (
@@ -122,6 +116,7 @@ export default function NewCodePage() {
                 <button type="submit" className="btn btn-primary">
                     Create
                 </button>
+                {error && <div className="alert alert-danger py-2">{error}</div>}
             </form>
         </div>
     );
