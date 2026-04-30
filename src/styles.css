@@ -34,6 +34,12 @@ body {
   border-color: var(--border);
 }
 
+.form-control::placeholder,
+.form-select::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
 .card {
   border: none;
   border-radius: 1rem;
