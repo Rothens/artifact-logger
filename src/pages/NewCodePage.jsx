@@ -82,7 +82,7 @@ export default function NewCodePage() {
                         className="form-control"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="Miyajima sand vial / Tuna Mayo Onigiri"
+                        placeholder="Osaka sand vial / Tuna Mayo Onigiri"
                     />
                 </div>
 
