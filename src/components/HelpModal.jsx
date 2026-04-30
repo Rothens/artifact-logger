@@ -64,7 +64,7 @@ export default function HelpModal({ show, onClose }) {
     {
       id: 'help-home',
       title: t('helpSectionHome'),
-      steps: [t('helpHomeStep1'), t('helpHomeStep2'), t('helpHomeStep3')],
+      steps: [t('helpHomeStep1'), t('helpHomeStep2'), t('helpHomeStep3'), t('helpHomeStep4')],
     },
     {
       id: 'help-scan',
@@ -90,6 +90,17 @@ export default function HelpModal({ show, onClose }) {
         t('helpSettingsStep2'),
         t('helpSettingsStep3'),
         t('helpSettingsStep4'),
+      ],
+    },
+    {
+      id: 'help-sync',
+      title: t('helpSectionSync'),
+      steps: [
+        t('helpSyncStep1'),
+        t('helpSyncStep2'),
+        t('helpSyncStep3'),
+        t('helpSyncStep4'),
+        t('helpSyncStep5'),
       ],
     },
     {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
     getItemRecordById,
@@ -29,6 +29,21 @@ export default function ItemPage() {
     const { t } = useI18n();
     const fileInputRef = useRef(null);
     const cameraInputRef = useRef(null);
+    const autosaveTimer = useRef(null);
+
+    // Autosave 1.5s after the last field change (not triggered by capture buttons)
+    const scheduleAutosave = useCallback((latestItem) => {
+        clearTimeout(autosaveTimer.current);
+        autosaveTimer.current = setTimeout(async () => {
+            try {
+                await saveItemRecord(latestItem);
+                setMessage(t('autosaved'));
+                setTimeout(() => setMessage(''), MSG_SHORT);
+            } catch {
+                // silent — the user can still save manually
+            }
+        }, 1500);
+    }, [t]);
 
     useEffect(() => {
         async function load() {
@@ -125,20 +140,19 @@ export default function ItemPage() {
     }
 
     function updateField(field, value) {
-        setItem((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
+        setItem((prev) => {
+            const next = { ...prev, [field]: value };
+            scheduleAutosave(next);
+            return next;
+        });
     }
 
     function updateMetadataField(field, value) {
-        setItem((prev) => ({
-            ...prev,
-            metadata: {
-                ...prev.metadata,
-                [field]: value,
-            },
-        }));
+        setItem((prev) => {
+            const next = { ...prev, metadata: { ...prev.metadata, [field]: value } };
+            scheduleAutosave(next);
+            return next;
+        });
     }
 
     function captureCurrentTime() {
@@ -294,9 +308,14 @@ export default function ItemPage() {
                 <div>
                     <label className="form-label">{t('collectedAt')}</label>
                     <input
+                        type="datetime-local"
                         className="form-control"
-                        value={item.collectedAt || ''}
-                        readOnly
+                        value={item.collectedAt ? item.collectedAt.slice(0, 16) : ''}
+                        onChange={(e) => {
+                            // Convert local datetime-local value back to full ISO string
+                            const iso = e.target.value ? new Date(e.target.value).toISOString() : '';
+                            updateField('collectedAt', iso);
+                        }}
                     />
                 </div>
 
@@ -353,23 +372,38 @@ export default function ItemPage() {
                             {t('takePhoto')}
                         </button>
                     </div>
-                    {item.photo?.dataUrl && (
+                    {item.photo && (
                         <div className="mt-2">
-                            <img
-                                src={item.photo.dataUrl}
-                                alt={t('photo')}
-                                className="img-fluid rounded"
-                                style={{ maxHeight: '240px' }}
-                            />
+                            {item.photo.dataUrl ? (
+                                <img
+                                    src={item.photo.dataUrl}
+                                    alt={t('photo')}
+                                    className="img-fluid rounded"
+                                    style={{ maxHeight: '240px' }}
+                                />
+                            ) : (
+                                <div className="p-3 rounded bg-light border text-muted small d-flex align-items-center gap-2">
+                                    <i className="bi bi-image fs-4"></i>
+                                    <div>
+                                        <div>{item.photo.name || 'photo'}</div>
+                                        <div className="text-muted" style={{ fontSize: '0.75rem' }}>
+                                            Photo data not included in this export
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                             <div className="small text-muted mt-1">
-                                {item.photo.width}×{item.photo.height}
+                                {item.photo.name && <span className="me-2">{item.photo.name}</span>}
+                                {item.photo.width && item.photo.height && (
+                                    <span>{item.photo.width}×{item.photo.height}</span>
+                                )}
                                 {item.photo.compressedSize
                                     ? ` · ${formatBytes(item.photo.compressedSize)}`
                                     : ''}
                             </div>
                         </div>
                     )}
-                    {item.photo?.dataUrl && (
+                    {item.photo && (
                         <button
                             type="button"
                             className="btn btn-sm btn-outline-danger mt-2"
